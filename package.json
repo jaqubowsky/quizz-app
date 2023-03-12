@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "base-64": "^1.0.0",
+    "nanoid": "^4.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "styled-components": "^5.3.8",
