@@ -15,11 +15,11 @@ const Title = () => {
   );
 };
 
-const Home = () => {
+const Home = (props) => {
   return (
     <Container>
       <Title />
-      <Button name="Start quiz" />
+      <Button handleClick={props.handleClick} name="Start quiz" />
     </Container>
   );
 };
