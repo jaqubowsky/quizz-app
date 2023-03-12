@@ -4,8 +4,11 @@ const theme = {
   colors: {
     font: "#293264",
     button: "#4D5B9E",
+    borderAnswer: "#4D5B9E",
+    borderQuestion: "#DBDEF0",
     buttonFont: "#FFFFFF",
     picked: "#D6DBF5",
+    hover: "#dde0f2",
   },
   fonts: {
     karla: "karla, sans-serif",
