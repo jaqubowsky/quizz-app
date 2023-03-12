@@ -8,9 +8,10 @@ const StyledContainer = styled.main`
   align-items: center;
   width: 100%;
   height: 100%;
-  width: 700px;
+  width: 1200px;
+  padding: 1em;
+  font-size: 1.1rem;
   gap: 1.5em;
-  font-size: 1.4rem;
   color: ${(props) => props.theme.colors.font};
 `;
 
