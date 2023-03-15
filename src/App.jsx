@@ -1,8 +1,8 @@
-import Home from "./Pages/Home";
-import Quiz from "./Pages/Quiz";
+import { Home } from "./Pages/Home";
+import { Quiz } from "./Pages/Quiz";
 import { nanoid } from "nanoid";
-import GlobalStyle from "./Styles/Global";
-import Theme from "./Styles/Theme";
+import { GlobalStyle } from "./Styles/Global";
+import { Theme } from "./Styles/Theme";
 import { useState } from "react";
 import { shuffle } from "./Utils/shuffle";
 
