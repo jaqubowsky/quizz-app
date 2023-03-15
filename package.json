@@ -13,6 +13,8 @@
     "nanoid": "^4.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-loader-spinner": "^5.3.4",
+    "react-promise-tracker": "^2.1.1",
     "styled-components": "^5.3.8",
     "typeface-karla": "^1.1.13"
   },
