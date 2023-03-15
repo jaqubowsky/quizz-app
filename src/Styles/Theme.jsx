@@ -9,6 +9,9 @@ const theme = {
     buttonFont: "#FFFFFF",
     picked: "#D6DBF5",
     hover: "#dde0f2",
+    incorrect: "#F8BCBC",
+    correct: "#94D7A2",
+    default: '#FFFFFF'
   },
   fonts: {
     karla: "karla, sans-serif",
