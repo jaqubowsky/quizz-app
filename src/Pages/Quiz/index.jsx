@@ -1,5 +1,6 @@
 import Container from "../../Components/Container";
-import { useState } from "react";
+import Button from "../../Components/Button";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import decodeHtmlEntities from "../../Utils/decodeHtml";
 import { nanoid } from "nanoid";
@@ -18,6 +19,12 @@ const StyledAnswerContainer = styled.div`
   border-bottom: 1px solid ${(props) => props.theme.colors.borderQuestion};
 `;
 
+const StyledResultContainer = styled.div`
+  display: flex;
+  gap: 1em;
+  align-items: center;
+`;
+
 const StyledAnswers = styled.div`
   display: flex;
   justify-content: space-between;
@@ -34,61 +41,122 @@ const Answer = styled.div`
   background: ${(props) => props.color};
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.hover};
+    background-color: ${(props) => props.hover};
   }
 `;
 
-const Question = ({ questionData }) => {
-  const answersDataObject = questionData.all_answers.map((answer) => ({
-    answer: answer,
-    isPicked: false,
-    isCorrect: answer === questionData.correct_answer ? true : false,
-    id: nanoid(),
-  }));
+const Quiz = ({ fetchQuestions }) => {
+  const [questionsData, setQuestionsData] = useState([]);
+  const [isFinished, setIsFinished] = useState(false);
+  const [correct, setCorrect] = useState(0);
 
-  const [answersData, setAnswersData] = useState(answersDataObject);
+  useEffect(() => {
+    setQuestions();
+  }, []);
 
-  const answerElement = answersData.map((answer) => (
-    <Answer
-      color={answer.isPicked ? (props) => props.theme.colors.picked : "white"}
-      onClick={pickAnswer}
-      key={answer.id}
-    >
-      {decodeHtmlEntities(answer.answer)}
-    </Answer>
+  function setQuestions() {
+    fetchQuestions().then((data) => setQuestionsData(data));
+  }
+
+  const questionElement = questionsData.map((question) => (
+    <Question
+      key={question.id}
+      questionData={question}
+      isFinished={isFinished}
+      handleClick={pickAnswer}
+    />
   ));
 
-  function pickAnswer(e) {
-    setAnswersData((prevData) =>
-      prevData.map((answer) => {
-        if (decodeHtmlEntities(answer.answer) === e.target.textContent) {
-          return { ...answer, isPicked: !answer.isPicked };
+  function pickAnswer(event, currentQuestionId) {
+    setQuestionsData((prevData) => {
+      return prevData.map((question) => {
+        if (question.id === currentQuestionId) {
+          return {
+            ...question,
+            all_answers: question.all_answers.map((answer) => {
+              const isPicked =
+                decodeHtmlEntities(answer.answer) === event.target.textContent;
+              return { ...answer, isPicked: isPicked };
+            }),
+          };
         } else {
-          return { ...answer, isPicked: false };
+          return question;
         }
-      })
-    );
-
-    console.log(answersData);
+      });
+    });
   }
+
+  function checkAnswers() {
+    questionsData.forEach((question) => {
+      question.all_answers.forEach((answer) => {
+        if (answer.isPicked && answer.isCorrect) {
+          setCorrect((prevScore) => prevScore + 1);
+        }
+      });
+    });
+
+    setIsFinished(true);
+  }
+
+  function playAgain() {
+    setQuestions();
+    setIsFinished(false);
+    setCorrect(0);
+  }
+
+  return (
+    <Container>
+      <StyledQuestionContainer>{questionElement}</StyledQuestionContainer>
+      <StyledResultContainer>
+        {isFinished && (
+          <h3>{`You scored ${correct} / ${questionsData.length} correct answers`}</h3>
+        )}
+        {!isFinished ? (
+          <Button
+            handleClick={() => checkAnswers()}
+            name="Check answers"
+          ></Button>
+        ) : (
+          <Button handleClick={() => playAgain()} name="Play again"></Button>
+        )}
+      </StyledResultContainer>
+    </Container>
+  );
+};
+
+const Question = ({ questionData, handleClick, isFinished }) => {
+  const answerElement = questionData.all_answers.map((answer) => {
+    const setColor = () => {
+      if (isFinished) {
+        return answer.isCorrect
+          ? (props) => props.theme.colors.correct
+          : answer.isPicked
+          ? (props) => props.theme.colors.incorrect
+          : (props) => props.theme.colors.default;
+      } else {
+        return answer.isPicked
+          ? (props) => props.theme.colors.picked
+          : (props) => props.theme.colors.default;
+      }
+    };
+
+    return (
+      <Answer
+        color={setColor()}
+        hover={!isFinished ? (props) => props.theme.colors.hover : ""}
+        key={nanoid()}
+        onClick={!isFinished ? () => handleClick(event, questionData.id) : ""}
+      >
+        {decodeHtmlEntities(answer.answer)}
+      </Answer>
+    );
+  });
 
   return (
     <StyledAnswerContainer>
       <h2>{decodeHtmlEntities(questionData.question)}</h2>
       <StyledAnswers>{answerElement}</StyledAnswers>
     </StyledAnswerContainer>
-  );
-};
-
-const Quiz = (props) => {
-  const questionElement = props.questionsData.map((question) => (
-    <Question key={question.id} questionData={question} />
-  ));
-
-  return (
-    <Container>
-      <StyledQuestionContainer>{questionElement}</StyledQuestionContainer>
-    </Container>
   );
 };
 
