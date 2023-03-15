@@ -7,19 +7,28 @@ import {
   StyledResultContainer,
 } from "../../Styles/Quiz.styled";
 import { Question } from "./Question";
+import { usePromiseTracker } from "react-promise-tracker";
+import { trackPromise } from "react-promise-tracker";
+import { Load } from "../../Components/Loader";
 
-const Quiz = ({ fetchQuestions }) => {
+export const Quiz = ({ fetchQuestions }) => {
   const [questionsData, setQuestionsData] = useState([]);
   const [isFinished, setIsFinished] = useState(false);
   const [correct, setCorrect] = useState(0);
 
   function setQuestions() {
-    fetchQuestions().then((data) => setQuestionsData(data));
+    trackPromise(fetchQuestions()).then((data) => setQuestionsData(data));
   }
 
   useEffect(() => {
     setQuestions();
   }, []);
+
+  const LoadingIndicator = () => {
+    const { promiseInProgress } = usePromiseTracker({ delay: 500 });
+
+    return promiseInProgress && <Load />;
+  };
 
   const questionElement = questionsData.map((question) => (
     <Question
@@ -68,23 +77,24 @@ const Quiz = ({ fetchQuestions }) => {
   }
 
   return (
-    <Container>
-      <StyledQuestionContainer>{questionElement}</StyledQuestionContainer>
-      <StyledResultContainer>
-        {isFinished && (
-          <h3>{`You scored ${correct} / ${questionsData.length} correct answers`}</h3>
-        )}
-        {!isFinished ? (
-          <Button
-            handleClick={() => checkAnswers()}
-            name="Check answers"
-          ></Button>
-        ) : (
-          <Button handleClick={() => playAgain()} name="Play again"></Button>
-        )}
-      </StyledResultContainer>
-    </Container>
+    <>
+      <LoadingIndicator />
+      <Container>
+        <StyledQuestionContainer>{questionElement}</StyledQuestionContainer>
+        <StyledResultContainer>
+          {isFinished && (
+            <h3>{`You scored ${correct} / ${questionsData.length} correct answers`}</h3>
+          )}
+          {!isFinished ? (
+            <Button
+              handleClick={() => checkAnswers()}
+              name="Check answers"
+            ></Button>
+          ) : (
+            <Button handleClick={() => playAgain()} name="Play again"></Button>
+          )}
+        </StyledResultContainer>
+      </Container>
+    </>
   );
 };
-
-export { Quiz };

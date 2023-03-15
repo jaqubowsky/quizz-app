@@ -15,7 +15,7 @@ const Title = () => {
   );
 };
 
-const Home = (props) => {
+export const Home = (props) => {
   return (
     <Container>
       <Title />
@@ -24,4 +24,3 @@ const Home = (props) => {
   );
 };
 
-export  { Home };
