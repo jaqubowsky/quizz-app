@@ -12,6 +12,10 @@ const StyledAnswerContainer = styled.div`
   padding: 1.5em 0;
   gap: 1em;
   border-bottom: 1px solid ${(props) => props.theme.colors.borderQuestion};
+
+  & h2 {
+    text-align: center;
+  }
 `;
 
 const StyledResultContainer = styled.div`
@@ -22,7 +26,9 @@ const StyledResultContainer = styled.div`
 
 const StyledAnswers = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 1em;
+  flex-wrap: wrap;
 `;
 
 const Answer = styled.div`
@@ -31,7 +37,6 @@ const Answer = styled.div`
   padding: 0.2em 0.8em;
   border-radius: 15px;
   font-size: 1.1rem;
-  width: 20%;
   cursor: pointer;
   background: ${(props) => props.color};
 

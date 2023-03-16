@@ -5,18 +5,15 @@ import { GlobalStyle } from "./Styles/Global";
 import { Theme } from "./Styles/Theme";
 import { useState } from "react";
 import { shuffle } from "./Utils/shuffle";
-import { usePromiseTracker } from "react-promise-tracker";
-import { trackPromise } from "react-promise-tracker";
-import { Load } from "./Components/Loader";
 
 function App() {
   const [isClicked, setIsClicked] = useState(false);
 
   async function fetchQuestions() {
-    const response = await trackPromise(
-      fetch("https://opentdb.com/api.php?amount=5&type=multiple")
+    const response = await fetch(
+      "https://opentdb.com/api.php?amount=5&type=multiple"
     );
-    const data = await trackPromise(response.json());
+    const data = await response.json();
     const questions = data.results.map((question) => ({
       question: question.question,
       correct_answer: question.correct_answer,
@@ -34,16 +31,9 @@ function App() {
     return questions;
   }
 
-  const LoadingIndicator = () => {
-    const { promiseInProgress } = usePromiseTracker({ delay: 500 });
-
-    return promiseInProgress && <Load />;
-  };
-
   return (
     <Theme>
       <GlobalStyle />
-      <LoadingIndicator />
       {!isClicked ? (
         <Home handleClick={() => setIsClicked(true)} />
       ) : (

@@ -53,9 +53,8 @@ p, h1, h2, h3, h4, h5, h6 {
   9. Create a root stacking context
 */
 #root, #__next {
-  isolation: isolate;
-  width: 100vw;
-  height: 100vh;
+  display: grid;
+  height: 100%;
 }
 `;
 

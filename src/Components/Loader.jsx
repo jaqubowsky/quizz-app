@@ -15,7 +15,7 @@ export const Load = () => {
       <Oval
         height={80}
         width={80}
-        color= "blue"
+        color="blue"
         wrapperStyle={{}}
         wrapperClass=""
         visible={true}

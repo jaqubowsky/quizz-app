@@ -3,16 +3,18 @@ import styled from "styled-components";
 const StyledContainer = styled.main`
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
-  width: 1200px;
-  padding: 1em;
+  margin: 0 auto;
+  padding: 1em 0;
+  width: 80%;
   font-size: 1.1rem;
-  gap: 1.5em;
+  gap: 1em;
   color: ${(props) => props.theme.colors.font};
+
+  @media (max-width: 768px) {
+    width: 90%;
+  }
 `;
 
 const Container = ({ children }) => {
